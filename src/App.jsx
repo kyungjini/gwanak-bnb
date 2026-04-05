@@ -15,19 +15,17 @@ function App() {
     }));
   };
 
+  const guestTypes = ["adult", "child", "baby"];
+  
   return (
     <div>
-      <button onClick={() => changeGuest("adult", -1)} disabled={guests["adult"] === 0}>-</button>
-      <p>Adult: {guests["adult"]}</p>
-      <button onClick={() => changeGuest("adult", 1)}>+</button>
-      
-      <button onClick={() => changeGuest("child", -1)} disabled={guests["child"] === 0}>-</button>
-      <p>Child: {guests["child"]}</p>
-      <button onClick={() => changeGuest("child", 1)}>+</button>
-
-      <button onClick={() => changeGuest("baby", -1)} disabled={guests["baby"] === 0}>-</button>
-      <p>Baby: {guests["baby"]}</p>
-      <button onClick={() => changeGuest("baby", 1)}>+</button>
+      {guestTypes.map((type) => (
+        <div key={type}>
+          <button onClick={() => changeGuest(type, -1)} disabled={guests[type] === 0}>-</button>
+          <p>{type}: {guests[type]}</p>
+          <button onClick={() => changeGuest(type, 1)}>+</button>
+        </div>
+      ))}
     </div>
   )
 }
