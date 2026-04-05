@@ -1,12 +1,27 @@
 import './App.css'
 import React, { useState } from "react";
 
+function GuestRow({type, count, onChange}) {
+  return (
+    <div className="guest-row">
+    <p className="guest-label">{type}</p>
+    <div className="guest-controls">
+    <button className="guest-btn" onClick={() => onChange(type, -1)} disabled={count === 0}>-</button>
+    <span className="guest-count">{count}</span>
+    <button className="guest-btn" onClick={() => onChange(type, 1)}>+</button>
+    </div>
+    </div>
+  );
+}
+
 function App() {
   const [guests, setGuests] = useState({
     adult: 0,
     child: 0,
     baby: 0
   });
+
+  const [isGuestOpen, setlsGuestOpen] = useState(false); 
 
   const changeGuest = (type, diff) => {
     setGuests((prev) => ({
@@ -16,19 +31,23 @@ function App() {
   };
 
   const guestTypes = ["adult", "child", "baby"];
-  
-  return (
-    <div>
-      
-      <p className="total-guest">Total Guest: {guests["adult"]+guests["child"]+guests["baby"]}</p>
+  const total = guests["adult"]+guests["child"]+guests["baby"];
 
-      {guestTypes.map((type) => (
-        <div key={type} className="guest-row">
-          <button className="guest-btn" onClick={() => changeGuest(type, -1)} disabled={guests[type] === 0}>-</button>
-          <p className="guest-label">{type}: {guests[type]}</p>
-          <button className="guest-btn" onClick={() => changeGuest(type, 1)}>+</button>
-        </div>
-      ))}
+  return (
+    <div className="guest-wrapper">
+      <button className="guest-pop" onClick={() => setlsGuestOpen((prev) => !prev)}>Total Guest: {total}</button>
+      {isGuestOpen && (
+        <div className="guest-panel">
+        {guestTypes.map((type) => (
+          <GuestRow
+          key={type}
+          type={type}
+          count={guests[type]}
+          onChange={changeGuest}
+        />
+        ))}
+      </div>
+      )}
     </div>
   )
 }
