@@ -31,11 +31,15 @@ function App() {
   };
 
   const guestTypes = ["adult", "child", "baby"];
+
   const total = guests["adult"]+guests["child"]+guests["baby"];
+  const triggerText = total === 0 ? "Select guest" : "Total Guest: " + total;
 
   return (
     <div className="guest-wrapper">
-      <button className="guest-pop" onClick={() => setlsGuestOpen((prev) => !prev)}>Total Guest: {total}</button>
+      <button className="guest-pop" onClick={() => setlsGuestOpen((prev) => !prev)}>
+        {triggerText}
+      </button>
       {isGuestOpen && (
         <div className="guest-panel">
         {guestTypes.map((type) => (
