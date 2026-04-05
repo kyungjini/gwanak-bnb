@@ -2,27 +2,32 @@ import './App.css'
 import React, { useState } from "react";
 
 function App() {
-  const [countAdult, setCountAdult] = useState(0)
-  const [countChild, setCountChild] = useState(0)
-  const [countBaby, setCountBaby] = useState(0)
+  const [guests, setGuests] = useState({
+    adult: 0,
+    child: 0,
+    baby: 0
+  });
+
+  const changeGuest = (type, diff) => {
+    setGuests((prev) => ({
+      ...prev,
+      [type]: Math.max(0, prev[type] + diff),
+    }));
+  };
 
   return (
     <div>
-      <button onClick={() => setCountAdult(countAdult-1)} disabled={countAdult === 0}>
-      -
-      </button>
-      <p>Guest: {countAdult}</p>
-      <button onClick={() => setCountAdult(countAdult+1)}>
-      +
-      </button>
+      <button onClick={() => changeGuest("adult", -1)} disabled={guests["adult"] === 0}>-</button>
+      <p>Adult: {guests["adult"]}</p>
+      <button onClick={() => changeGuest("adult", 1)}>+</button>
       
-      <button onClick={() => setCountAdult(countAdult-1)} disabled={countAdult === 0}>
-      -
-      </button>
-      <p>Guest: {countAdult}</p>
-      <button onClick={() => setCountAdult(countAdult+1)}>
-      +
-      </button>
+      <button onClick={() => changeGuest("child", -1)} disabled={guests["child"] === 0}>-</button>
+      <p>Child: {guests["child"]}</p>
+      <button onClick={() => changeGuest("child", 1)}>+</button>
+
+      <button onClick={() => changeGuest("baby", -1)} disabled={guests["baby"] === 0}>-</button>
+      <p>Baby: {guests["baby"]}</p>
+      <button onClick={() => changeGuest("baby", 1)}>+</button>
     </div>
   )
 }
