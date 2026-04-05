@@ -1,0 +1,13 @@
+button {
+  font-size: 18px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: #d0d0d0;
+  color: #777;
+  cursor: not-allowed;
+}
