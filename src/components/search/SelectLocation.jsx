@@ -13,11 +13,13 @@ function SelectLocation() {
   const [query, setQuery] = useState("");
   const [highlightIndex, setHighlightIndex] = useState(-1);
   const [suggestions] = useState(EXAMPLE_SUGGESTIONS);
+  const displayText = query || "Search destinations";
 
   return (
     <div className="location-wrapper">
       <button className="location-pop" onClick={() => setIsOpen((prev) => !prev)} type="button">
-        Location
+        <span className="search-field-title">Where</span>
+        <span className="search-field-value">{displayText}</span>
       </button>
 
       {isOpen && (
@@ -27,7 +29,7 @@ function SelectLocation() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Type hte location"
+            placeholder="Search destinations"
           />
           <ul className="suggestion-list">
             {suggestions.map((item, index) => (

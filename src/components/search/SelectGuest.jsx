@@ -37,19 +37,31 @@ function SelectGuest() {
     }));
   };
 
-  const guestTypes = ["adult", "child", "baby"];
+  const guestTypes = ["Adults", "Children", "Infants"];
   const total = guests.adult + guests.child + guests.baby;
-  const triggerText = total === 0 ? "Select guest" : `Total Guest: ${total}`;
+  const triggerText = total === 0 ? "Add guests" : `${total} guests`;
+
+  const guestKeyMap = {
+    Adults: "adult",
+    Children: "child",
+    Infants: "baby",
+  };
 
   return (
     <div className="guest-wrapper">
       <button className="guest-pop" onClick={() => setIsGuestOpen((prev) => !prev)} type="button">
-        {triggerText}
+        <span className="search-field-title">Who</span>
+        <span className="search-field-value">{triggerText}</span>
       </button>
       {isGuestOpen && (
         <div className="guest-panel">
           {guestTypes.map((type) => (
-            <GuestRow key={type} type={type} count={guests[type]} onChange={changeGuest} />
+            <GuestRow
+              key={type}
+              type={type}
+              count={guests[guestKeyMap[type]]}
+              onChange={(label, diff) => changeGuest(guestKeyMap[label], diff)}
+            />
           ))}
         </div>
       )}
