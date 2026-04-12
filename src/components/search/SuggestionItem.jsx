@@ -1,8 +1,8 @@
 import React from "react";
 
-function SuggestionItem({ label, isActive = false }) {
+function SuggestionItem({ label, index, isActive = false }) {
   return (
-    <li className={`suggestion-item ${isActive ? "active" : ""}`}>
+    <li className={`suggestion-item ${isActive ? "active" : ""}`} data-index={index}>
       {label}
     </li>
   );
