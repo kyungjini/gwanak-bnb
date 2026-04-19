@@ -15,4 +15,5 @@ Create a `.env` file at the repo root or inside `backend/` and set:
 ### Commands
 
 - `npm run server` starts the backend
+  - `curl http://localhost:3000/api/health` to check server status (mongoDB)
 - `npm run dev:server` starts the backend with Node watch mode

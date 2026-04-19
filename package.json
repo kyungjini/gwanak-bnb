@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "server": "node backend/server.js",
-    "dev:server": "node --watch backend/server.js"
+    "dev:server": "node --watch backend/server.js",
+    "seed:accommodations": "node backend/seed/seedAccommodations.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
