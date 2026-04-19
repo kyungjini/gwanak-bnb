@@ -1,4 +1,4 @@
-import { countAccommodations, searchAccommodations } from "../repositories/accommodation.repository.js";
+import { searchAccommodations } from "../repositories/accommodation.repository.js";
 
 function normalizeSearchPayload(payload = {}) {
   const destination = String(payload.destination || "").trim();
@@ -39,11 +39,10 @@ export async function getAccommodationSearchResults(payload) {
   }
 
   const results = await searchAccommodations(normalizedPayload);
-  const count = await countAccommodations(normalizedPayload);
 
   return {
     query: normalizedPayload,
-    count,
+    count: results.length,
     results,
   };
 }

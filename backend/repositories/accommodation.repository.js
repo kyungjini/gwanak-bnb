@@ -23,8 +23,3 @@ export async function searchAccommodations({ destination, guests, checkIn, check
 
   return Accommodation.find(query).sort({ rating: -1, pricePerNight: 1 }).lean();
 }
-
-export async function countAccommodations(filters) {
-  const results = await searchAccommodations(filters);
-  return results.length;
-}

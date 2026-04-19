@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import SuggestionItem from "./SuggestionItem";
 import LOCATION_SUGGESTIONS from "./data/locationSuggestions.json";
 
@@ -17,32 +17,31 @@ function isPrefixMatch(candidate, query) {
   );
 }
 
-function SelectLocation() {
+function SelectLocation({ selectedLocation = "", onSelectLocation }) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [inputValue, setInputValue] = useState("");
   const [highlightIndex, setHighlightIndex] = useState(-1);
   const suggestionListRef = useRef(null);
-  const displayText = inputValue || "Search destinations";
+  const displayText = selectedLocation || "Search destinations";
   const normalizedQuery = query.trim().toLowerCase();
-  const filteredSuggestions = normalizedQuery
-    ? LOCATION_SUGGESTIONS.filter((item) => isPrefixMatch(item, normalizedQuery))
-    : LOCATION_SUGGESTIONS;
+  const filteredSuggestions = useMemo(
+    () =>
+      normalizedQuery
+        ? LOCATION_SUGGESTIONS.filter((item) => isPrefixMatch(item, normalizedQuery))
+        : LOCATION_SUGGESTIONS,
+    [normalizedQuery]
+  );
 
-  useEffect(() => {
-    if (filteredSuggestions.length === 0) {
-      setHighlightIndex(-1);
-      setInputValue(query);
+  const commitSelection = (selectedSuggestion) => {
+    if (!selectedSuggestion) {
       return;
     }
 
-    setHighlightIndex((prev) => {
-      if (prev < 0) {
-        return -1;
-      }
-      return prev % filteredSuggestions.length;
-    });
-  }, [normalizedQuery, filteredSuggestions.length]);
+    setQuery(selectedSuggestion);
+    setHighlightIndex(-1);
+    setIsOpen(false);
+    onSelectLocation(selectedSuggestion);
+  };
 
   useEffect(() => {
     if (highlightIndex < 0 || !suggestionListRef.current) {
@@ -58,19 +57,12 @@ function SelectLocation() {
     }
   }, [highlightIndex]);
 
-  useEffect(() => {
-    if (highlightIndex < 0) {
-      setInputValue(query);
+  const handleKeyDown = (event) => {
+    if (event.key === "Escape") {
+      setIsOpen(false);
       return;
     }
 
-    const highlightedSuggestion = filteredSuggestions[highlightIndex];
-    if (highlightedSuggestion) {
-      setInputValue(highlightedSuggestion);
-    }
-  }, [highlightIndex, filteredSuggestions, query]);
-
-  const handleKeyDown = (event) => {
     if (filteredSuggestions.length === 0) {
       return;
     }
@@ -93,18 +85,24 @@ function SelectLocation() {
 
     if (event.key === "Enter" && highlightIndex >= 0) {
       event.preventDefault();
-      const selectedSuggestion = filteredSuggestions[highlightIndex];
-      if (selectedSuggestion) {
-        setQuery(selectedSuggestion);
-        setInputValue(selectedSuggestion);
-        setIsOpen(false);
-      }
+      commitSelection(filteredSuggestions[highlightIndex]);
     }
+  };
+
+  const handleToggle = () => {
+    setIsOpen((prev) => {
+      const nextIsOpen = !prev;
+      if (nextIsOpen) {
+        setQuery(selectedLocation);
+      }
+
+      return nextIsOpen;
+    });
   };
 
   return (
     <div className="location-wrapper">
-      <button className="location-pop" onClick={() => setIsOpen((prev) => !prev)} type="button">
+      <button className="location-pop" onClick={handleToggle} type="button">
         <span className="search-field-title">Where</span>
         <span className="search-field-value">{displayText}</span>
       </button>
@@ -114,10 +112,9 @@ function SelectLocation() {
           <input
             className="location-input"
             type="text"
-            value={inputValue}
+            value={query}
             onChange={(e) => {
               setQuery(e.target.value);
-              setInputValue(e.target.value);
               setHighlightIndex(-1);
             }}
             onKeyDown={handleKeyDown}
@@ -131,6 +128,7 @@ function SelectLocation() {
                   index={index}
                   label={item}
                   isActive={index === highlightIndex}
+                  onClick={() => commitSelection(item)}
                 />
               ))
             ) : (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function GuestRow({ type, count, onChange }) {
   return (
@@ -22,7 +22,7 @@ function GuestRow({ type, count, onChange }) {
   );
 }
 
-function SelectGuest() {
+function SelectGuest({ onTotalChange }) {
   const [guests, setGuests] = useState({
     adult: 0,
     child: 0,
@@ -40,6 +40,10 @@ function SelectGuest() {
   const guestTypes = ["Adults", "Children", "Infants"];
   const total = guests.adult + guests.child + guests.baby;
   const triggerText = total === 0 ? "Add guests" : `${total} guests`;
+
+  useEffect(() => {
+    onTotalChange(total);
+  }, [onTotalChange, total]);
 
   const guestKeyMap = {
     Adults: "adult",

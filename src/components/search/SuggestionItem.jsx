@@ -1,8 +1,14 @@
 import React from "react";
 
-function SuggestionItem({ label, index, isActive = false }) {
+function SuggestionItem({ label, index, isActive = false, onClick }) {
   return (
-    <li className={`suggestion-item ${isActive ? "active" : ""}`} data-index={index}>
+    <li
+      className={`suggestion-item ${isActive ? "active" : ""}`}
+      data-index={index}
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+    >
       {label}
     </li>
   );
